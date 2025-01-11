@@ -8,6 +8,7 @@ use App\Models\Categorias\Categoria;
 use App\Http\Responsables\Productos\ProductosStore;
 use App\Http\Responsables\Productos\ProductosUpdate;
 use App\Http\Responsables\Productos\ProductosShow;
+use App\Http\Responsables\Productos\ProductosDelete;
 
 class ProductosController extends Controller
 {
@@ -94,6 +95,11 @@ class ProductosController extends Controller
      */
     public function destroy($id)
     {
-        //
+        dd($id);
+    }
+
+    public function eliminarProducto(Request $request)
+    {
+        return new ProductosDelete();
     }
 }

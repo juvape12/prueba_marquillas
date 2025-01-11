@@ -17,3 +17,4 @@ Route::get('/', function () {
 
 Route::resource('productos', 'Productos\ProductosController');
 Route::resource('categorias', 'Categorias\CategoriasController');
+Route::delete('eliminar_producto', 'Productos\ProductosController@eliminarProducto')->name('eliminarProducto');

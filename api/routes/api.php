@@ -17,4 +17,5 @@ Route::post('app/categoria_store', 'CategoriaController@store');
 Route::post('app/producto_store', 'ProductoController@store');
 Route::put('app/producto_update', 'ProductoController@update');
 Route::get('app/producto_consultar', 'ProductoController@index');
-Route::get('app/producto_consultar_id/', 'ProductoController@show');
+Route::get('app/producto_consultar_id', 'ProductoController@show');
+Route::delete('app/producto_delete', 'ProductoController@delete');

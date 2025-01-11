@@ -55,7 +55,11 @@
                             <td>
                                 <a href="{{route('productos.edit', $producto['id'])}}" class="btn btn-sm btn-success">Actualizar Producto</a>
 
-                                <a href="#" class="btn btn-sm btn-danger">Eliminar Producto</a>
+                                <a href="#" class="btn btn-danger btn-sm" title="Eliminar Producto"
+                                        id="eliminar"
+                                        onclick="eliminarProducto({{$producto['id']}})">
+                                        Eliminar Producto
+                                    </a>
                             </td>
                         </tr>
                     @endforeach
@@ -71,6 +75,16 @@
         <div class="alert alert-info" id="alert">
             <ul>
                 <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;&nbsp;{!! \Session::get('success') !!}
+            </ul>
+        </div>
+    @endif
+    </div>
+
+    <div class="col-md-8 col-md-offset-2 m-t-10">
+    @if (\Session::has('info'))
+        <div class="alert alert-danger" id="alert">
+            <ul>
+                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;&nbsp;{!! \Session::get('info') !!}
             </ul>
         </div>
     @endif
@@ -117,199 +131,31 @@
             });
         });
 
-       function cambiarEstado(user_id)
+       function eliminarProducto(id)
        {
-            Swal.fire({
-                title: 'You really want',
-                html: 'to change the status of this user?',
-                icon: 'info',
-                type: 'info',
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No'
-            }).then((result) => {
-                if (result.value)
-                {
-                    $.ajax({
-                        async: true,
-                        url: "",
-                        type: "POST",
-                        dataType: "JSON",
-                        data: {
-                            'id_user': user_id
-                        },
-                        beforeSend: function()
-                        {
-                            $("#loaderGif").show();
-                            $("#loaderGif").removeClass('ocultar');
-                        },
-                        success: function(response)
-                        {
-                            if(response == "-1")
-                            {
-                                $("#loaderGif").hide();
-                                $("#loaderGif").addClass('ocultar');
-                                Swal.fire({
-                                    position: 'center',
-                                    title: 'Error!',
-                                    html:  'An error occurred, try again, if the problem persists contact support.',
-                                    icon: 'info',
-                                    type: 'info',
-                                    showCancelButton: false,
-                                    showConfirmButton: false,
-                                    allowOutsideClick: false,
-                                    allowEscapeKey:false,
-                                    timer: 6000
-                                });
-                                return;
-                            }
+            let confirmacion = confirm("¿Realmente quieres eliminar este producto?");
 
-                            if(response == 0 || response == "0")
-                            {
-                                $("#loaderGif").hide();
-                                $("#loaderGif").addClass('ocultar');
-                                Swal.fire({
-                                    position: 'center',
-                                    title: 'Error!',
-                                    html:  'An error occurred, try again, if the problem persists contact support.',
-                                    icon: 'info',
-                                    type: 'info',
-                                    showCancelButton: false,
-                                    showConfirmButton: false,
-                                    allowOutsideClick: false,
-                                    allowEscapeKey:false,
-                                    timer: 5000
-                                });
-                                return;
-                            }
-
-                            if(response == "success")
-                            {
-                                $("#loaderGif").hide();
-                                $("#loaderGif").addClass('ocultar');
-                                Swal.fire({
-                                    position: 'center',
-                                    title: 'Success!',
-                                    html:  "The user's status has been successfully updated",
-                                    icon: 'success',
-                                    type: 'success',
-                                    showCancelButton: false,
-                                    showConfirmButton: false,
-                                    allowOutsideClick: false,
-                                    allowEscapeKey:false,
-                                    timer: 2000
-                                });
-
-                                setTimeout(function(){
-                                    window.location.reload();
-                                }, 3000);
-                                return;
-                            }
-                        }
-                    });
-                }
-            });
-        }
-
-        function updatePassword(id_user)
-        {
-            Swal.fire({
-                title: 'Update Password',
-                html: '<input class="form-control"' +
-                       'placeholder="Entered the new password" type="password" name="change_clave" id="change_clave">',
-                icon: 'info',
-                type: 'info',
-                showCancelButton: true,
-                confirmButtonText: 'Update',
-                cancelButtonText: 'Cancel',
-                cancelButtonClassName: 'color-cancel-button'
-            }).then((result) =>
+            if(confirmacion)
             {
-                let new_clave = $("#change_clave").val();
+                $.ajax({
+                    async: true,
+                    url: "{{route('eliminarProducto')}}",
+                    type: "DELETE",
+                    dataType: "JSON",
+                    data: {
+                        'id_producto': id
+                    },
+                    success: function(response)
+                    {
+                        alert(response.Data.message);
 
-                if (result.value)
-                {
-                    $.ajax({
-                        async: true,
-                        url: "",
-                        type: "POST",
-                        dataType: "JSON",
-                        data: {
-                            'id_user': id_user,
-                            'clave': new_clave
-                        },
-                        beforeSend: function()
-                        {
-                            $("#loaderGif").show();
-                            $("#loaderGif").removeClass('ocultar');
-                        },
-                        success: function(response)
-                        {
-                            if(response == "-1")
-                            {
-                                $("#loaderGif").hide();
-                                $("#loaderGif").addClass('ocultar');
-                                Swal.fire({
-                                    position: 'center',
-                                    title: 'Error!',
-                                    html:  'The password is required',
-                                    icon: 'error',
-                                    type: 'error',
-                                    showCancelButton: false,
-                                    showConfirmButton: false,
-                                    allowOutsideClick: false,
-                                    allowEscapeKey:false,
-                                    timer: 3000
-                                });
-                                return;
-                            }
-
-                            if(response == 0 || response == "0")
-                            {
-                                $("#loaderGif").hide();
-                                $("#loaderGif").addClass('ocultar');
-                                Swal.fire({
-                                    position: 'center',
-                                    title: 'Error!',
-                                    html:  'An error occurred, try again, if the problem persists contact support.',
-                                    icon: 'info',
-                                    type: 'info',
-                                    showCancelButton: false,
-                                    showConfirmButton: false,
-                                    allowOutsideClick: false,
-                                    allowEscapeKey:false,
-                                    timer: 5000
-                                });
-                                return;
-                            }
-
-                            if(response == "success")
-                            {
-                                $("#loaderGif").hide();
-                                $("#loaderGif").addClass('ocultar');
-                                Swal.fire({
-                                    position: 'center',
-                                    title: 'Success!',
-                                    html:  "The user's password has been successfully updated",
-                                    icon: 'success',
-                                    type: 'success',
-                                    showCancelButton: false,
-                                    showConfirmButton: false,
-                                    allowOutsideClick: false,
-                                    allowEscapeKey:false,
-                                    timer: 2000
-                                });
-
-                                setTimeout(function(){
-                                    window.location.reload();
-                                }, 3000);
-
-                                return;
-                            }
-                        }
-                    });
-                }
-            });
+                        setTimeout(() => {
+                            
+                            window.location.reload();
+                        }, 2000);
+                    }
+                });
+            }
         }
     </script>
 @endsection

@@ -65,6 +65,8 @@
                 $('#alert').hide();
                 $('#alert').addClass('ocultar');
             }, 3000);
+
+            $("#categoria").trigger('focus');
         });
 
     </script>

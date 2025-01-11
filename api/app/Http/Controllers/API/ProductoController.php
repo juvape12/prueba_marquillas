@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Responsables\productos\ProductoStore;
 use App\Http\Responsables\productos\ProductoUpdate;
 use App\Http\Responsables\productos\ProductoShow;
+use App\Http\Responsables\productos\ProductoDelete;
 use App\Traits\ApiResponser;
 
 class ProductoController extends Controller
@@ -112,5 +113,18 @@ class ProductoController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function delete(Request $request)
+    {
+        $datos = $request;
+
+        if(is_object($datos) && !empty($datos) && !is_null($datos))
+        {
+            return new ProductoDelete();
+
+        } else {
+            return $this->errorResponse(['respuesta' => 'Datos Invalidos o Vacios'], 400);
+        }
     }
 }
